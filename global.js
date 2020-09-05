@@ -13,3 +13,7 @@ const int = setInterval(()=>{
 
 console.log(__dirname);
 console.log(__filename);
+
+
+//this would create an error because document is a window object not the global
+console.log(document.querySelector);

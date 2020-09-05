@@ -32,3 +32,11 @@ Javascript can be run in the browser thanks to the v8 engine (which compiles jav
 : connect to a database 
 : act as a server for content
 
+- Streams
+
+Start using data, before it has finished loading 
+
+Rather than dumping all of the data in one go
+
+Deliver the water in a stream (bit by bit, it fills a buffer and then sent across to the browser)
+

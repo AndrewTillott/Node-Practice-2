@@ -26,4 +26,4 @@ const os = require('os');
 
 //this logs their os e.g. win32 for windows 32. the home dir represents where the home directory of the user
 console.log(os.platform(), os.homedir());
-
+// there are several core modules on node.js os is one of them, a file system is another
