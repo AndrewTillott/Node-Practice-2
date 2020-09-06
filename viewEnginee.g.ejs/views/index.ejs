@@ -1,0 +1,30 @@
+<html lang="en">
+<%- include("./partials/head.ejs") %>
+
+<body>
+      <!--used to get a partial (a component)-->
+        <!--  - used instead of =  why?  = leads to us having a string, not raw html
+        this minus sign doesnt do that so we use - instead for includes
+        -->
+  <%- include("./partials/nav.ejs") %>
+
+  <div class="blogs content">
+    <h2>All Blogs</h2>
+
+    <% if (blogs.length > 0) { %>
+      <% blogs.forEach(blog => { %>
+        <h3 class="title"><%= blog.title %></h3>
+        <p class="snippet"><%= blog.snippet %></p>
+      <% }) %>
+    <% } else { %>
+      <p>There are no blogs to display...</p>
+    <% } %>
+     <!--Remember that if you are outputting data to  a screen you need to use <%= %> -->
+     <p><%= name %></p>
+  </div>
+
+  <%- include("./partials/footer.ejs") %>
+</body>
+
+</html>
+          
