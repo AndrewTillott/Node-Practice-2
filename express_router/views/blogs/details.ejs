@@ -1,0 +1,51 @@
+<html lang="en">
+<%- include("../partials/head.ejs") %>
+
+<body>
+  <%- include("../partials/nav.ejs") %>
+
+  <div class="details content">
+    <h2><%= blog.title %></h2>
+    <div class="content">
+      <p><%= blog.body %></p>
+    </div>
+    <a class="delete" data-doc="<%= blog._id %>">delete</a>
+  </div>
+
+  <%- include("../partials/footer.ejs") %>
+
+  <script>
+    const trashcan = document.querySelector('a.delete');
+    trashcan.addEventListener('click', (e) => {
+      const endpoint = `/blogs/${trashcan.dataset.doc}`;
+      fetch(endpoint, {
+        method: 'DELETE',
+      })
+      .then(response => response.json())
+      .then(data => window.location.href = data.redirect)
+      .catch(err => console.log(err));
+    });
+  </script>
+  <script>
+    // we search for the delete button
+      const trashcan = document.querySelector('a.delete');
+      // when the delete button is clicked this is fired
+      trashcan.addEventListener('click', (e)=>{
+        // see how the data doc is identified as a data doc --> this is how you select that data-doc and extract the blog_id above
+        // the blog id is ten added to the end of the url
+          const endpoint = `/blogs/${trashcan.dataset.doc}`;
+
+          // we are doing this because we want to send a fetch request to the endpoint
+          // you can see what the endpoint is above
+          fetch(endpoint, {
+            // we need to specify that it is a delete request
+            method: 'DELETE'
+          })
+          // this returns another promise, that parses the JSON from before into another object that we can use
+          .then((response)=>response.json())
+          .then((data)=> window.location.href = data.redirect)
+          .catch(err => console.log(err));
+      })
+  </script>
+</body>
+</html>
