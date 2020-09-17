@@ -24,6 +24,13 @@ app.set('view engine', 'ejs');
 
 // middleware & static files
 app.use(express.static('public'));
+
+
+// extended: true is unneccessary but optional
+// this takes all of the data that is encoded on the url and parses it into an express object that can be used 
+// this allows us to accept form data e.g. from post requests
+//without this line the data would be submitted as undefined
+app.use(express.urlencoded({extended: true}));
 app.use(morgan('dev'));
 app.use((req, res, next) => {
   res.locals.path = req.path;
@@ -83,6 +90,36 @@ app.get('/about', (req, res) => {
   res.render('about', { title: 'About' });
 });
 
+app.get('/blogs/:id', (req, res)=>{
+  const id = req.params.id;
+  Blog.findById(id)
+    .then(result=>{
+      res.render( 'details', {blog: result, title: 'Blog Details' })
+    })
+    .catch(err=>{
+      console.log(err);
+    })
+})
+
+// delete request provides the handler for the delete request
+app.delete('/blogs/:id', (req, res)=>{
+  // identifies the id from the parameter
+  const id = req.params.id;
+
+  // goes out to the database -> find the relevant document by the id and deletes it from the database
+  // remember this is the Blog database Model
+  Blog.findByIdAndDelete(id)
+  // because it is async we have a .then
+  .then(result =>{
+    // saying that after the delete method has been completed we will send a response to the browser
+    // it will be a json object. It then tells the browser where to redirect too
+    res.json({redirect: '/blogs'})
+  })
+  .catch(err => {
+    console.log(err);
+  })
+})
+
 // blog routes
 app.get('/blogs/create', (req, res) => {
   res.render('create', { title: 'Create a new blog' });
@@ -100,6 +137,24 @@ app.get('/blogs', (req, res) => {
       console.log(err);
     });
 });
+
+app.post('/blogs', (req, res)=>{
+  // middleware that will parse the data onto the request object -- > url encoded see earlier is what makes that possible
+
+  // note that this is possible because the form submitted has the same schema structure as the blog schema
+  const blog = new Blog(req.body)
+  
+  // save it to the database in the blog model
+  blog.save()
+    .then((result)=>{
+      // we then send them (on submit) to the blogs page
+      res.redirect('/blogs');
+    })
+    .catch((err)=>{
+      console.log(err);
+    })
+
+})
 
 // 404 page
 app.use((req, res) => {
